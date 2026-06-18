@@ -1,0 +1,238 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{font-family:var(--font-mono);font-size:12px;line-height:1.45;padding:1rem 0;color:var(--color-text-primary)}
+.ctrls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:1.25rem}
+.ctrls label{font-size:11px;color:var(--color-text-secondary)}
+.cv{font-size:11px;font-weight:500;min-width:28px}
+.panel{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem}
+.ptitle{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:.4rem;margin-bottom:.9rem}
+.bar-block{margin-bottom:.85rem}
+.bar-block:last-child{margin-bottom:0}
+.row{display:flex;align-items:flex-start;gap:8px;white-space:pre}
+.lbl{min-width:110px;font-size:11px;color:var(--color-text-secondary);padding-top:1px}
+.pct{min-width:34px;text-align:right;font-size:11px;color:var(--color-text-secondary);padding-top:1px}
+.bar{letter-spacing:0}
+.meta{margin-top:2px;margin-left:118px;font-size:10px;color:var(--color-text-tertiary)}
+.desc{margin-top:.65rem;font-size:10px;color:var(--color-text-tertiary)}
+.ct{color:#1D9E75}.cb{color:#378ADD}.cam{color:#BA7517}
+.cc{color:#D85A30}.cg{color:#639922}.cp{color:#7F77DD}
+.cpk{color:#D4537E}.cr{color:#E24B4A}
+.ct-d{color:#085041}.cb-d{color:#0C447C}.cam-d{color:#633806}
+.cc-d{color:#712B13}.cg-d{color:#27500A}.cp-d{color:#3C3489}
+.cpk-d{color:#72243E}.cr-d{color:#791F1F}
+.ct-l{color:#5DCAA5}.cb-l{color:#85B7EB}.cam-l{color:#EF9F27}
+.cc-l{color:#F0997B}.cg-l{color:#97C459}.cp-l{color:#AFA9EC}
+.cpk-l{color:#ED93B1}.cr-l{color:#F09595}
+.cz{color:var(--color-text-tertiary)}
+</style>
+
+<h2 class="sr-only">ASCII 3D progress bar showcase — 10 styles using Unicode box-drawing and block characters to simulate depth</h2>
+
+<div class="w">
+<div class="ctrls">
+  <label>fill</label>
+  <input type="range" id="fill" min="0" max="100" value="68" step="1" style="width:120px">
+  <span class="cv" id="fv">68%</span>
+  <label style="margin-left:.5rem">style</label>
+  <select id="ss" style="font-family:var(--font-mono);font-size:11px;padding:2px 6px">
+    <option value="all">all styles</option>
+    <option value="0">01 · extruded block</option>
+    <option value="1">02 · bevelled tube</option>
+    <option value="2">03 · isometric fill</option>
+    <option value="3">04 · raised channel</option>
+    <option value="4">05 · recessed slot</option>
+    <option value="5">06 · layered slab</option>
+    <option value="6">07 · pipe extrude</option>
+    <option value="7">08 · hex prism</option>
+    <option value="8">09 · chamfer rail</option>
+    <option value="9">10 · stacked brick</option>
+  </select>
+</div>
+<div id="cont"></div>
+</div>
+
+<script>
+const METRICS = [
+  {lbl:"CPU  6-core",pct:72,c:"ct",cl:"ct-l",cd:"ct-d",meta:"3.8 GHz · usr 58% sys 14%"},
+  {lbl:"RAM  16 GB  ",pct:55,c:"cb",cl:"cb-l",cd:"cb-d",meta:"8.8 GB used · 7.2 GB free"},
+  {lbl:"GPU  RTX4070",pct:88,c:"cc",cl:"cc-l",cd:"cc-d",meta:"83°C · fan 78% · tdp 150W"},
+  {lbl:"NET  bond0  ",pct:41,c:"cp",cl:"cp-l",cd:"cp-d",meta:"↓ 480 Mbps · ↑ 55 Mbps"},
+  {lbl:"DSK  nvme0  ",pct:63,c:"cg",cl:"cg-l",cd:"cg-d",meta:"↑ 220 MB/s · lat 0.3ms"},
+  {lbl:"SWP  4 GB   ",pct:18,c:"cam",cl:"cam-l",cd:"cam-d",meta:"0.9 GB used · zswap on"},
+  {lbl:"TMP  sensor ",pct:79,c:"cpk",cl:"cpk-l",cd:"cpk-d",meta:"79°C · throttle threshold 95°C"},
+  {lbl:"PWR  battery",pct:95,c:"cr",cl:"cr-l",cd:"cr-d",meta:"95% · 3h 12m · charging"}
+];
+
+const W = 34;
+
+function span(cls,...chars){return`<span class="${cls}">${chars.join("")}</span>`}
+function rep(c,n){return c.repeat(Math.max(0,n))}
+
+const STYLES = [
+  {
+    name:"01 · extruded block",
+    desc:"Top face ▀, front face █, shadow ▄ — three-row depth illusion using half-block characters",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const top =span(m.cl,rep("▀",f))+span("cz",rep("▀",e));
+      const mid =span(m.c, rep("█",f))+span("cz",rep("░",e));
+      const bot =span(m.cd,rep("▄",f))+span("cz",rep(" ",e));
+      return[`╔${top}╗`,`║${mid}║`,`╚${bot}╝`]
+    }
+  },
+  {
+    name:"02 · bevelled tube",
+    desc:"╔═╗ / ║ ║ / ╚═╝ frame — fill uses ▓ body with ▒ leading bevel and ░ trail",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const bevel = f>1?span(m.cl,"▒"):"";
+      const body  = f>2?span(m.c,rep("▓",f-2)):"";
+      const tip   = f>0?span(m.cd,"▌"):"";
+      const empty = span("cz",rep("·",e));
+      const mid = bevel+body+tip+empty;
+      return[
+        `╔${span(m.cl,rep("═",f))}${span("cz",rep("─",e))}╗`,
+        `║${mid}║`,
+        `╚${span(m.cd,rep("═",f))}${span("cz",rep("─",e))}╝`
+      ]
+    }
+  },
+  {
+    name:"03 · isometric fill",
+    desc:"Isometric top-face illusion — ▟ rising left edge, ▀ top surface, ▙ shadow floor",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const topFace = (f>0?span(m.cl,"▟"+rep("▀",Math.max(0,f-1))):"") + span("cz",rep("─",e));
+      const midFace = (f>0?span(m.c, "█"+rep("█",Math.max(0,f-1))):"") + span("cz",rep("░",e));
+      const botFace = (f>0?span(m.cd,"▙"+rep("▄",Math.max(0,f-1))):"") + span("cz",rep(" ",e));
+      return[`[${topFace}]`,`[${midFace}]`,`[${botFace}]`]
+    }
+  },
+  {
+    name:"04 · raised channel",
+    desc:"Box-drawing raised channel — ╒╕ top rim, ╞╡ sides, ╘╛ base give a machined slot look",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const top = span(m.cl,rep("═",f))+span("cz",rep("─",e));
+      const mid = span(m.c, rep("█",f))+span("cz",rep("▒",e));
+      const bot = span(m.cd,rep("▀",f))+span("cz",rep("─",e));
+      return[`╒${top}╕`,`╞${mid}╡`,`╘${bot}╛`]
+    }
+  },
+  {
+    name:"05 · recessed slot",
+    desc:"Inverted depth — ╔╗ overhang casts a shadow, fill sits below the frame plane",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const lip  = span(m.cd,rep("▄",f))+span("cz",rep("─",e));
+      const mid  = span(m.c, rep("█",f))+span("cz",rep("░",e));
+      const base = span(m.cl,rep("▀",f))+span("cz",rep("─",e));
+      return[`╔${lip}╗`,`║${mid}║`,`╚${base}╝`]
+    }
+  },
+  {
+    name:"06 · layered slab",
+    desc:"Three distinct planes rendered as ▔ highlight, ▬ body, ▁ shadow — stacked slab depth",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const hi  = span(m.cl,rep("▔",f))+span("cz",rep("─",e));
+      const mid = span(m.c, rep("▬",f))+span("cz",rep("─",e));
+      const sh  = span(m.cd,rep("▁",f))+span("cz",rep(" ",e));
+      return[`[${hi}]`,`[${mid}]`,`[${sh}]`]
+    }
+  },
+  {
+    name:"07 · pipe extrude",
+    desc:"Cylindrical pipe extrusion — ╭─╮ curved top, │ sides, ╰─╯ base simulate round tube",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const topF = f>1 ? span(m.cl,"╭"+rep("─",f-2)+"╮") : f===1?span(m.cl,"│"):"";
+      const topE = span("cz",rep("·",e));
+      const midF = f>1 ? span(m.c,"│"+rep("█",f-2)+"│") : f===1?span(m.c,"█"):"";
+      const midE = span("cz",rep("·",e));
+      const botF = f>1 ? span(m.cd,"╰"+rep("─",f-2)+"╯") : f===1?span(m.cd,"│"):"";
+      const botE = span("cz",rep("·",e));
+      return[`[${topF+topE}]`,`[${midF+midE}]`,`[${botF+botE}]`]
+    }
+  },
+  {
+    name:"08 · hex prism",
+    desc:"Hexagonal prism cross-section — / top angled face, | front, \\ bottom edge",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const topF = f>2?span(m.cl,"/"+rep("▔",f-2)+"\\"):(f>0?span(m.cl,rep("/",f)):"");
+      const midF = f>2?span(m.c, "|"+rep("█",f-2)+"|"):(f>0?span(m.c,rep("█",f)):"");
+      const botF = f>2?span(m.cd,"\\"+rep("▁",f-2)+"/"): (f>0?span(m.cd,rep("\\",f)):"");
+      const eStr = span("cz",rep("·",e));
+      return[`[${topF+eStr}]`,`[${midF+eStr}]`,`[${botF+eStr}]`]
+    }
+  },
+  {
+    name:"09 · chamfer rail",
+    desc:"Chamfered edges — ▗ top-right start, ▟ body fill, ▖ bottom-right end for angled bevel",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const topF = f>1?span(m.cl,"▗"+rep("▀",f-1)):f>0?span(m.cl,"▗"):"";
+      const midF = f>1?span(m.c, "▐"+rep("█",f-1)):f>0?span(m.c,"▐"):"";
+      const botF = f>1?span(m.cd,"▝"+rep("▄",f-1)):f>0?span(m.cd,"▝"):"";
+      const eStr = span("cz",rep("░",e));
+      return[`║${topF+eStr}║`,`║${midF+eStr}║`,`║${botF+eStr}║`]
+    }
+  },
+  {
+    name:"10 · stacked brick",
+    desc:"Brick-course illusion — alternating ▛▜ / ██ / ▙▟ rows simulate stacked masonry depth",
+    render(pct,m){
+      const f=Math.round(pct/100*W), e=W-f;
+      const brickTop = (i)=>(i%2===0?"▛":"▜");
+      const brickBot = (i)=>(i%2===0?"▙":"▟");
+      let top="",mid="",bot="";
+      for(let i=0;i<W;i++){
+        if(i<f){top+=`<span class="${m.cl}">${brickTop(i)}</span>`;mid+=`<span class="${m.c}">█</span>`;bot+=`<span class="${m.cd}">${brickBot(i)}</span>`;}
+        else{top+=`<span class="cz">░</span>`;mid+=`<span class="cz">░</span>`;bot+=`<span class="cz"> </span>`;}
+      }
+      return[`[${top}]`,`[${mid}]`,`[${bot}]`]
+    }
+  }
+];
+
+function renderBar(s,pct,m){
+  const lines=s.render(pct,m);
+  return`<div class="bar-block">
+    <div class="row"><span class="lbl">${m.lbl}</span><span class="bar">${lines[0]}</span><span class="pct"> ${Math.round(pct)}%</span></div>
+    <div class="row"><span class="lbl">${" ".repeat(m.lbl.length)}</span><span class="bar">${lines[1]}</span></div>
+    <div class="row"><span class="lbl">${" ".repeat(m.lbl.length)}</span><span class="bar">${lines[2]}</span></div>
+    <div class="meta">${m.meta}</div>
+  </div>`
+}
+
+function draw(){
+  const pct=parseInt(document.getElementById("fill").value);
+  document.getElementById("fv").textContent=pct+"%";
+  const sv=document.getElementById("ss").value;
+  const toShow=sv==="all"?STYLES:[STYLES[parseInt(sv)]];
+  document.getElementById("cont").innerHTML=toShow.map(s=>`
+    <div class="panel">
+      <div class="ptitle">${s.name}</div>
+      ${METRICS.map(m=>renderBar(s,m.pct*(pct/100)*1+pct*(1-(m.pct/100))*0,m)).join("")}
+      <div class="desc">${s.desc}</div>
+    </div>`).join("");
+}
+
+document.getElementById("fill").addEventListener("input",()=>{
+  const p=parseInt(document.getElementById("fill").value);
+  document.getElementById("fv").textContent=p+"%";
+  const sv=document.getElementById("ss").value;
+  const toShow=sv==="all"?STYLES:[STYLES[parseInt(sv)]];
+  document.getElementById("cont").innerHTML=toShow.map(s=>`
+    <div class="panel">
+      <div class="ptitle">${s.name}</div>
+      ${METRICS.map(m=>{const rp=Math.round(m.pct*(p/100)+p*0);return renderBar(s,m.pct,m)}).join("")}
+      <div class="desc">${s.desc}</div>
+    </div>`).join("");
+  draw();
+});
+document.getElementById("ss").addEventListener("change",draw);
+draw();
+</script>

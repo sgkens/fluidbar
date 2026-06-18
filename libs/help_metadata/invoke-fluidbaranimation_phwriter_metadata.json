@@ -1,0 +1,33 @@
+{
+  "indent": 1,
+  "examples": [
+    "Invoke-FluidBarAnimation -BarParameters @{ Width = 30; ColorMode = 'Gradient' }"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Console wrapper that sequences New-FluidBar generation across a 0 to 100 iteration loop with cursor safety.",
+    "cmdlet": "Invoke-FluidBarAnimation",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "Invoke-FluidBarAnimation [-BarParameters] <Hashtable> [-DelayMilliseconds <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "hashtable",
+      "description": "A splatted hashtable containing arguments for New-FluidBar.",
+      "inline": false,
+      "param": "BarParameters",
+      "name": "BarParameters",
+      "required": true
+    },
+    {
+      "type": "int",
+      "description": "The execution pause duration between iterative rendering frames.",
+      "inline": false,
+      "param": "DelayMilliseconds",
+      "name": "DelayMilliseconds",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,462 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { background: transparent; }
+
+  .kit {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    font-family: var(--font-mono, 'Space Mono', monospace);
+  }
+
+  .section-label {
+    font-family: var(--font-mono, 'Space Mono', monospace);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 0.75rem;
+  }
+
+  .logo-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .logo-card {
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .logo-card.dark-bg {
+    background: #0d0f14;
+    border-color: #1e2230;
+  }
+
+  .logo-card.light-bg {
+    background: #f4f5f7;
+    border-color: #dde0e8;
+  }
+
+  .logo-lockup {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-mark {
+    flex-shrink: 0;
+  }
+
+  .logo-text-group {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 3px;
+  }
+
+  .logo-name {
+    font-family: 'Syne', var(--font-sans);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-tagline {
+    font-family: 'Space Mono', var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .on-dark .logo-name { color: #f0f2f8; }
+  .on-dark .logo-tagline { color: #4a5270; }
+
+  .on-light .logo-name { color: #0d0f14; }
+  .on-light .logo-tagline { color: #7a82a0; }
+
+  .banner-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .swatch-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 90px;
+    border: 0.5px solid rgba(0,0,0,0.08);
+  }
+
+  .swatch-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 0.5px solid rgba(0,0,0,0.12);
+  }
+
+  .swatch-name {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .swatch-hex {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--color-text-secondary);
+  }
+
+  .type-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .type-specimen {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .type-meta {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--color-text-tertiary);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .type-sample { color: var(--color-text-primary); }
+
+  .download-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .dl-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.15s;
+  }
+
+  .dl-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="kit">
+
+  <!-- LOGO VARIANTS -->
+  <div>
+    <div class="section-label">Logo variants</div>
+    <div class="logo-row">
+
+      <!-- DARK -->
+      <div>
+        <div class="section-label" style="margin-bottom:0.4rem;">Dark</div>
+        <div class="logo-card dark-bg">
+          <div class="logo-lockup on-dark">
+            <svg class="logo-mark" width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="waveGradDark" x1="0" y1="22" x2="44" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ff4b8b"/>
+                  <stop offset="25%" stop-color="#c45aff"/>
+                  <stop offset="50%" stop-color="#4e8cff"/>
+                  <stop offset="75%" stop-color="#00d4aa"/>
+                  <stop offset="100%" stop-color="#00f0c8"/>
+                </linearGradient>
+                <linearGradient id="trackGradDark" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ff4b8b" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="#00f0c8" stop-opacity="0.18"/>
+                </linearGradient>
+                <clipPath id="clipMarkDark">
+                  <rect x="0" y="0" width="44" height="44" rx="10"/>
+                </clipPath>
+              </defs>
+              <rect x="0" y="0" width="44" height="44" rx="10" fill="#12152080"/>
+              <!-- track bg -->
+              <rect x="6" y="18" width="32" height="8" rx="4" fill="url(#trackGradDark)"/>
+              <!-- wave path (fluid sine) -->
+              <path d="M6 22 C10 14, 14 14, 18 22 C22 30, 26 30, 30 22 C32 18, 34 18, 38 22"
+                    stroke="url(#waveGradDark)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <!-- leading dot -->
+              <circle cx="38" cy="22" r="2.5" fill="#00f0c8"/>
+              <!-- tick marks (progress bar semantics) -->
+              <line x1="6" y1="30" x2="6" y2="33" stroke="#ff4b8b" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+              <line x1="17.3" y1="30" x2="17.3" y2="33" stroke="#c45aff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+              <line x1="28.7" y1="30" x2="28.7" y2="33" stroke="#00d4aa" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+              <line x1="38" y1="30" x2="38" y2="33" stroke="#00f0c8" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            </svg>
+            <div class="logo-text-group">
+              <span class="logo-name" style="background: linear-gradient(90deg, #ff4b8b 0%, #c45aff 35%, #4e8cff 65%, #00f0c8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">FluidaBar</span>
+              <span class="logo-tagline">Progress · Precision · Color</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT -->
+      <div>
+        <div class="section-label" style="margin-bottom:0.4rem;">Light</div>
+        <div class="logo-card light-bg">
+          <div class="logo-lockup on-light">
+            <svg class="logo-mark" width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="waveGradLight" x1="0" y1="22" x2="44" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#e0006a"/>
+                  <stop offset="25%" stop-color="#9b2be8"/>
+                  <stop offset="50%" stop-color="#2256d4"/>
+                  <stop offset="75%" stop-color="#008f72"/>
+                  <stop offset="100%" stop-color="#00b899"/>
+                </linearGradient>
+                <linearGradient id="trackGradLight" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#e0006a" stop-opacity="0.1"/>
+                  <stop offset="100%" stop-color="#00b899" stop-opacity="0.1"/>
+                </linearGradient>
+                <clipPath id="clipMarkLight">
+                  <rect x="0" y="0" width="44" height="44" rx="10"/>
+                </clipPath>
+              </defs>
+              <rect x="0" y="0" width="44" height="44" rx="10" fill="#ffffff" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08))"/>
+              <rect x="0" y="0" width="44" height="44" rx="10" fill="none" stroke="#dde0e8" stroke-width="0.5"/>
+              <rect x="6" y="18" width="32" height="8" rx="4" fill="url(#trackGradLight)"/>
+              <path d="M6 22 C10 14, 14 14, 18 22 C22 30, 26 30, 30 22 C32 18, 34 18, 38 22"
+                    stroke="url(#waveGradLight)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <circle cx="38" cy="22" r="2.5" fill="#00b899"/>
+              <line x1="6" y1="30" x2="6" y2="33" stroke="#e0006a" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="17.3" y1="30" x2="17.3" y2="33" stroke="#9b2be8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="28.7" y1="30" x2="28.7" y2="33" stroke="#008f72" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="38" y1="30" x2="38" y2="33" stroke="#00b899" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+            <div class="logo-text-group">
+              <span class="logo-name" style="background: linear-gradient(90deg, #e0006a 0%, #9b2be8 35%, #2256d4 65%, #00b899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">FluidaBar</span>
+              <span class="logo-tagline">Progress · Precision · Color</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARK ONLY -->
+  <div>
+    <div class="section-label">Mark only (icon)</div>
+    <div style="display: flex; gap: 1rem;">
+      <div class="logo-card dark-bg" style="padding: 1.5rem; flex: none; width: 80px; height: 80px;">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <defs>
+            <linearGradient id="waveGradIconD" x1="0" y1="22" x2="44" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ff4b8b"/>
+              <stop offset="25%" stop-color="#c45aff"/>
+              <stop offset="50%" stop-color="#4e8cff"/>
+              <stop offset="75%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00f0c8"/>
+            </linearGradient>
+            <linearGradient id="trackGradIconD" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ff4b8b" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#00f0c8" stop-opacity="0.18"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="44" height="44" rx="10" fill="#12152080"/>
+          <rect x="6" y="18" width="32" height="8" rx="4" fill="url(#trackGradIconD)"/>
+          <path d="M6 22 C10 14, 14 14, 18 22 C22 30, 26 30, 30 22 C32 18, 34 18, 38 22"
+                stroke="url(#waveGradIconD)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="38" cy="22" r="2.5" fill="#00f0c8"/>
+          <line x1="6" y1="30" x2="6" y2="33" stroke="#ff4b8b" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="17.3" y1="30" x2="17.3" y2="33" stroke="#c45aff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="28.7" y1="30" x2="28.7" y2="33" stroke="#00d4aa" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="38" y1="30" x2="38" y2="33" stroke="#00f0c8" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="logo-card light-bg" style="padding: 1.5rem; flex: none; width: 80px; height: 80px;">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <defs>
+            <linearGradient id="waveGradIconL" x1="0" y1="22" x2="44" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#e0006a"/>
+              <stop offset="25%" stop-color="#9b2be8"/>
+              <stop offset="50%" stop-color="#2256d4"/>
+              <stop offset="75%" stop-color="#008f72"/>
+              <stop offset="100%" stop-color="#00b899"/>
+            </linearGradient>
+            <linearGradient id="trackGradIconL" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#e0006a" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="#00b899" stop-opacity="0.1"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="44" height="44" rx="10" fill="#fff" stroke="#dde0e8" stroke-width="0.5"/>
+          <rect x="6" y="18" width="32" height="8" rx="4" fill="url(#trackGradIconL)"/>
+          <path d="M6 22 C10 14, 14 14, 18 22 C22 30, 26 30, 30 22 C32 18, 34 18, 38 22"
+                stroke="url(#waveGradIconL)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="38" cy="22" r="2.5" fill="#00b899"/>
+          <line x1="6" y1="30" x2="6" y2="33" stroke="#e0006a" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="17.3" y1="30" x2="17.3" y2="33" stroke="#9b2be8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="28.7" y1="30" x2="28.7" y2="33" stroke="#008f72" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="38" y1="30" x2="38" y2="33" stroke="#00b899" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- README BANNER -->
+  <div>
+    <div class="section-label">README banner</div>
+    <div class="banner-card" style="background: #0b0e18;">
+      <!-- ASCII bar simulation row -->
+      <div style="padding: 0.9rem 1.5rem 0; font-family: 'Space Mono', monospace; font-size: 10px; color: #1e2535; letter-spacing: 0.04em; user-select: none; overflow: hidden; white-space: nowrap;">
+        ████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+      </div>
+      <!-- main banner content -->
+      <div style="padding: 1.8rem 2rem 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none">
+            <defs>
+              <linearGradient id="bannerWave" x1="0" y1="22" x2="44" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ff4b8b"/>
+                <stop offset="25%" stop-color="#c45aff"/>
+                <stop offset="50%" stop-color="#4e8cff"/>
+                <stop offset="75%" stop-color="#00d4aa"/>
+                <stop offset="100%" stop-color="#00f0c8"/>
+              </linearGradient>
+              <linearGradient id="bannerTrack" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ff4b8b" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#00f0c8" stop-opacity="0.2"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="44" height="44" rx="10" fill="#12192e"/>
+            <rect x="0" y="0" width="44" height="44" rx="10" fill="none" stroke="#1e2a45" stroke-width="0.5"/>
+            <rect x="6" y="18" width="32" height="8" rx="4" fill="url(#bannerTrack)"/>
+            <path d="M6 22 C10 14, 14 14, 18 22 C22 30, 26 30, 30 22 C32 18, 34 18, 38 22"
+                  stroke="url(#bannerWave)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="38" cy="22" r="2.5" fill="#00f0c8"/>
+            <line x1="6" y1="30" x2="6" y2="33" stroke="#ff4b8b" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+            <line x1="17.3" y1="30" x2="17.3" y2="33" stroke="#c45aff" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+            <line x1="28.7" y1="30" x2="28.7" y2="33" stroke="#00d4aa" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+            <line x1="38" y1="30" x2="38" y2="33" stroke="#00f0c8" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          </svg>
+          <div>
+            <div style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.03em; background: linear-gradient(90deg, #ff4b8b 0%, #c45aff 28%, #4e8cff 56%, #00f0c8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;">FluidaBar</div>
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #3a445e; margin-top: 4px;">for PowerShell</div>
+          </div>
+        </div>
+
+        <p style="font-family: 'Space Mono', monospace; font-size: 12px; color: #4a5478; max-width: 460px; line-height: 1.7; letter-spacing: 0.02em;">
+          Terminal progress bars with strict mathematical sizing,<br>embedded overlays, ANSI styling &amp; true-color RGB gradients.
+        </p>
+
+        <!-- simulated progress bar specimen -->
+        <div style="width: 100%; max-width: 480px; font-family: 'Space Mono', monospace; font-size: 11px; margin-top: 0.25rem;">
+          <div style="position: relative; height: 22px; border-radius: 3px; background: #101520; overflow: hidden; border: 0.5px solid #1a2035;">
+            <div style="position: absolute; inset: 0; width: 72%; background: linear-gradient(90deg, #ff4b8b, #c45aff 35%, #4e8cff 65%, #00f0c8); opacity: 0.85;"></div>
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #f0f4ff; font-size: 10px; letter-spacing: 0.1em; mix-blend-mode: normal; text-shadow: 0 0 8px rgba(0,0,0,0.9);">
+              ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░  72%  ETA 4s
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 5px; color: #2a3248; font-size: 9px; letter-spacing: 0.08em;">
+            <span>0%</span><span style="color: #3a4a6a;">████████████████████▒▒▒▒▒▒▒▒</span><span>100%</span>
+          </div>
+        </div>
+
+        <!-- badges row -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.25rem;">
+          <span style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 10px; border-radius: 4px; background: #1a1030; color: #c45aff; border: 0.5px solid #2d1a55; letter-spacing: 0.06em;">true-color RGB</span>
+          <span style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 10px; border-radius: 4px; background: #0a1a30; color: #4e8cff; border: 0.5px solid #0f2850; letter-spacing: 0.06em;">ANSI / VT</span>
+          <span style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 10px; border-radius: 4px; background: #041a18; color: #00d4aa; border: 0.5px solid #083528; letter-spacing: 0.06em;">Unicode / ASCII</span>
+          <span style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 10px; border-radius: 4px; background: #1a0818; color: #ff4b8b; border: 0.5px solid #3a0f28; letter-spacing: 0.06em;">PowerShell 5.1+</span>
+        </div>
+      </div>
+      <!-- bottom rule -->
+      <div style="height: 2px; background: linear-gradient(90deg, #ff4b8b, #c45aff 28%, #4e8cff 56%, #00f0c8 100%); opacity: 0.6;"></div>
+    </div>
+  </div>
+
+  <!-- COLOR PALETTE -->
+  <div>
+    <div class="section-label">Prismatic palette</div>
+    <div class="swatch-row">
+      <div class="swatch" style="background: #1a0818;">
+        <div class="swatch-color" style="background: #ff4b8b;"></div>
+        <div class="swatch-name" style="color: #ff4b8b;">Plasma</div>
+        <div class="swatch-hex">#ff4b8b</div>
+      </div>
+      <div class="swatch" style="background: #140d22;">
+        <div class="swatch-color" style="background: #c45aff;"></div>
+        <div class="swatch-name" style="color: #c45aff;">Violet</div>
+        <div class="swatch-hex">#c45aff</div>
+      </div>
+      <div class="swatch" style="background: #080e22;">
+        <div class="swatch-color" style="background: #4e8cff;"></div>
+        <div class="swatch-name" style="color: #4e8cff;">Cobalt</div>
+        <div class="swatch-hex">#4e8cff</div>
+      </div>
+      <div class="swatch" style="background: #031814;">
+        <div class="swatch-color" style="background: #00d4aa;"></div>
+        <div class="swatch-name" style="color: #00d4aa;">Tidal</div>
+        <div class="swatch-hex">#00d4aa</div>
+      </div>
+      <div class="swatch" style="background: #021210;">
+        <div class="swatch-color" style="background: #00f0c8;"></div>
+        <div class="swatch-name" style="color: #00f0c8;">Fluida</div>
+        <div class="swatch-hex">#00f0c8</div>
+      </div>
+      <div class="swatch" style="background: var(--color-background-secondary);">
+        <div class="swatch-color" style="background: #0b0e18;"></div>
+        <div class="swatch-name">Void</div>
+        <div class="swatch-hex">#0b0e18</div>
+      </div>
+      <div class="swatch" style="background: var(--color-background-secondary);">
+        <div class="swatch-color" style="background: #f4f5f7; border: 0.5px solid #dde0e8;"></div>
+        <div class="swatch-name">Mist</div>
+        <div class="swatch-hex">#f4f5f7</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div>
+    <div class="section-label">Typography</div>
+    <div class="type-row">
+      <div class="type-specimen">
+        <div class="type-meta">Syne 800<br>Wordmark</div>
+        <div class="type-sample" style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.03em; background: linear-gradient(90deg, #ff4b8b, #c45aff, #4e8cff, #00f0c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">FluidaBar</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta">Space Mono 700<br>Labels / tags</div>
+        <div class="type-sample" style="font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-primary);">Progress · Precision · Color</div>
+      </div>
+      <div class="type-specimen" style="border-bottom: none;">
+        <div class="type-meta">Space Mono 400<br>Body / code</div>
+        <div class="type-sample" style="font-family: 'Space Mono', monospace; font-size: 11px; color: var(--color-text-secondary);">New-FluidaBar -Width 60 -Style Gradient -Overlay '72% ETA 4s'</div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,33 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-VerticalBar -Data ([ordered]@{ 'CPU' = 45; 'RAM' = 70 }) -Height 8"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Renders a multi-column TUI chart natively handling variable arrays via hashtable/ordered dictionary data inputs.",
+    "cmdlet": "New-VerticalBar",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-VerticalBar [-Data] <OrderedDictionary> [-Height <Int32>] [-Style <String>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "OrderedDictionary",
+      "description": "Key-Value pairs driving column headers and percentage heights.",
+      "inline": false,
+      "param": "Data",
+      "name": "Data",
+      "required": true
+    },
+    {
+      "type": "int",
+      "description": "Total terminal lines utilized for the Y-axis.",
+      "inline": false,
+      "param": "Height",
+      "name": "Height",
+      "required": false
+    }
+  ]
+}

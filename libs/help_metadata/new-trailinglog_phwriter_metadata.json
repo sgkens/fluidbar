@@ -1,0 +1,25 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-TrailingLog -LogData  -MaxLines 5"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Processes collection objects (like Queue) into sequential arrays for trailing output with gradient fading.",
+    "cmdlet": "New-TrailingLog",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-TrailingLog [-LogData] <Object> [-MaxLines <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "object",
+      "description": "The raw collection of data representing the execution log.",
+      "inline": false,
+      "param": "LogData",
+      "name": "LogData",
+      "required": true
+    }
+  ]
+}

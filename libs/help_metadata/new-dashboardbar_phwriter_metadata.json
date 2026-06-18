@@ -1,0 +1,25 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-DashboardBar -Data [PSCustomObject]@{ Disk = @{ Percentage = 80; Subtext = @('200GB Free') } }"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Aggregates custom objects to automate multi-line dashboard reporting formats, complete with offset subtext lines.",
+    "cmdlet": "New-DashboardBar",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-DashboardBar [-Data] <PSCustomObject> [-Width <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "PSCustomObject",
+      "description": "Must contain properties structured with .Percentage and .Subtext elements.",
+      "inline": false,
+      "param": "Data",
+      "name": "Data",
+      "required": true
+    }
+  ]
+}

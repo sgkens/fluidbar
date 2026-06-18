@@ -1,0 +1,33 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-Separator -Char '=' -Repeat 40"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Provides a robust, structurally calculated horizontal rule for separating output between modules or log streams.",
+    "cmdlet": "New-Separator",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-Separator [[-Char] <Char>] [-Repeat <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "char",
+      "description": "The character to be repeated to construct the separator.",
+      "inline": false,
+      "param": "Char",
+      "name": "Char",
+      "required": false
+    },
+    {
+      "type": "int",
+      "description": "Specifies the absolute character width of the generated separator.",
+      "inline": false,
+      "param": "Repeat",
+      "name": "Repeat",
+      "required": false
+    }
+  ]
+}

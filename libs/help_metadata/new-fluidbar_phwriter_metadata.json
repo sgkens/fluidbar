@@ -1,0 +1,42 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-FluidBar -Fill 50 -Width 20",
+    "New-FluidBar -Fill 80 -Width 40 -ColorMode Gradient -GradientStart @(255,0,0) -GradientEnd @(0,255,0)"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Generates static string representations of progress intervals with precise structural and color formatting.",
+    "cmdlet": "New-FluidBar",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-FluidBar [[-Brackets] <String[]>] [-Fill] <Int32> [-Width <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "string[]",
+      "description": "Cap strings for the left and right boundaries.",
+      "inline": false,
+      "param": "Brackets",
+      "name": "Brackets",
+      "required": false
+    },
+    {
+      "type": "int",
+      "description": "The completion percentage (0-100) driving internal character counts.",
+      "inline": false,
+      "param": "Fill",
+      "name": "Fill",
+      "required": true
+    },
+    {
+      "type": "int",
+      "description": "The absolute total character length of the generated string output.",
+      "inline": false,
+      "param": "Width",
+      "name": "Width",
+      "required": false
+    }
+  ]
+}

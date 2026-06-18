@@ -1,0 +1,261 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{font-family:var(--font-mono);font-size:12px;padding:1rem 0;color:var(--color-text-primary)}
+.controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:1.25rem}
+.controls label{font-size:11px;color:var(--color-text-secondary)}
+.ctrl-val{font-size:11px;font-weight:500;min-width:28px}
+.panel{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem}
+.ptitle{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:.4rem;margin-bottom:1rem}
+.chart-wrap{display:flex;gap:0;align-items:flex-end;line-height:1}
+.col{display:flex;flex-direction:column;align-items:center;gap:3px}
+.col-label{font-size:10px;color:var(--color-text-tertiary);margin-top:4px;text-align:center}
+.col-pct{font-size:10px;color:var(--color-text-secondary);font-weight:500}
+.col-bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.desc{margin-top:.75rem;font-size:11px;color:var(--color-text-tertiary)}
+.c-teal{color:#1D9E75}.c-blue{color:#378ADD}.c-amber{color:#BA7517}
+.c-coral{color:#D85A30}.c-green{color:#639922}.c-purple{color:#7F77DD}
+.c-pink{color:#D4537E}.c-red{color:#E24B4A}.c-gray{color:var(--color-text-tertiary)}
+</style>
+
+<h2 class="sr-only">ASCII extended vertical bar chart showcase for TUI / CLI dashboards</h2>
+
+<div class="wrap">
+<div class="controls">
+  <label>height</label>
+  <input type="range" id="hSlider" min="6" max="20" value="12" step="1" style="width:110px">
+  <span class="ctrl-val" id="hVal">12</span>
+  <label style="margin-left:.5rem">animate</label>
+  <input type="checkbox" id="animToggle">
+  <label style="margin-left:.5rem">style</label>
+  <select id="styleSelect" style="font-family:var(--font-mono);font-size:11px;padding:2px 6px">
+    <option value="all">all styles</option>
+    <option value="0">01 · full block</option>
+    <option value="1">02 · shade stack</option>
+    <option value="2">03 · braille col</option>
+    <option value="3">04 · thin pipe</option>
+    <option value="4">05 · double pipe</option>
+    <option value="5">06 · dot rise</option>
+    <option value="6">07 · diamond stack</option>
+    <option value="7">08 · arrow rise</option>
+    <option value="8">09 · wave col</option>
+    <option value="9">10 · segment LED</option>
+  </select>
+</div>
+<div id="container"></div>
+</div>
+
+<script>
+const COLS = [
+  {label:"CPU",pct:72,color:"c-teal"},
+  {label:"RAM",pct:55,color:"c-blue"},
+  {label:"GPU",pct:88,color:"c-coral"},
+  {label:"NET",pct:41,color:"c-purple"},
+  {label:"DSK",pct:63,color:"c-green"},
+  {label:"SWP",pct:18,color:"c-amber"},
+  {label:"TMP",pct:79,color:"c-pink"},
+  {label:"PWR",pct:95,color:"c-red"}
+];
+
+const STYLES = [
+  {
+    id:0, name:"01 · full block",
+    desc:"▁▂▃▄▅▆▇█ eighth-height steps — sub-row precision at the column tip",
+    render(pct, height, color) {
+      const eighths = ["▁","▂","▃","▄","▅","▆","▇","█"];
+      const total = pct / 100 * height;
+      const full = Math.floor(total);
+      const frac = Math.round((total - full) * 8);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        if(r < full) rows.push(`<span class="${color}">█</span>`);
+        else if(r === full && frac > 0) rows.push(`<span class="${color}">${eighths[frac-1]}</span>`);
+        else if(r === full) rows.push(`<span class="${color}">█</span>`);
+        else rows.push("░");
+      }
+      return rows;
+    }
+  },
+  {
+    id:1, name:"02 · shade stack",
+    desc:"░▒▓█ density gradient — bottom dense, top fades",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        const pos = filled - r;
+        if(r > filled) rows.push("░");
+        else if(pos < 1) rows.push(`<span class="${color}">▒</span>`);
+        else if(pos < 3) rows.push(`<span class="${color}">▓</span>`);
+        else rows.push(`<span class="${color}">█</span>`);
+      }
+      return rows;
+    }
+  },
+  {
+    id:2, name:"03 · braille col",
+    desc:"⣿⣷⣶⣦⣤⣄⣀ braille blocks — densest sub-cell vertical fill",
+    render(pct, height, color) {
+      const brl = ["⠀","⣀","⣄","⣤","⣦","⣶","⣷","⣿"];
+      const total = pct/100*height;
+      const full = Math.floor(total);
+      const frac = Math.round((total-full)*8);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        if(r < full) rows.push(`<span class="${color}">⣿</span>`);
+        else if(r === full) rows.push(`<span class="${color}">${brl[Math.max(1,frac)]}</span>`);
+        else rows.push("⠀");
+      }
+      return rows;
+    }
+  },
+  {
+    id:3, name:"04 · thin pipe",
+    desc:"┃ filled · ╎ empty — box-drawing verticals, minimal noise",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        rows.push(r <= filled ? `<span class="${color}">┃</span>` : "╎");
+      }
+      return rows;
+    }
+  },
+  {
+    id:4, name:"05 · double pipe",
+    desc:"║ filled · │ empty — double-rule verticals for bold presence",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        rows.push(r <= filled ? `<span class="${color}">║</span>` : "│");
+      }
+      return rows;
+    }
+  },
+  {
+    id:5, name:"06 · dot rise",
+    desc:"· ∘ ● rising density — sparse bottom to solid top",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        const pos = filled - r;
+        if(r > filled) rows.push("·");
+        else if(pos < 2) rows.push(`<span class="${color}">∘</span>`);
+        else rows.push(`<span class="${color}">●</span>`);
+      }
+      return rows;
+    }
+  },
+  {
+    id:6, name:"07 · diamond stack",
+    desc:"◆ filled · ◇ empty — geometric rhythm, reads well at any height",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        rows.push(r <= filled ? `<span class="${color}">◆</span>` : "◇");
+      }
+      return rows;
+    }
+  },
+  {
+    id:7, name:"08 · arrow rise",
+    desc:"▲ tip · ▴ body · · empty — directional upward flow",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        if(r > filled) rows.push("·");
+        else if(r === filled) rows.push(`<span class="${color}">▲</span>`);
+        else rows.push(`<span class="${color}">▴</span>`);
+      }
+      return rows;
+    }
+  },
+  {
+    id:8, name:"09 · wave col",
+    desc:"∿ ≈ ~ alternating — sinusoidal column texture",
+    render(pct, height, color) {
+      const wave=["∿","≈","~"];
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        rows.push(r <= filled ? `<span class="${color}">${wave[(filled-r)%3]}</span>` : "·");
+      }
+      return rows;
+    }
+  },
+  {
+    id:9, name:"10 · segment LED",
+    desc:"▬ filled · ╌ empty — horizontal segment stack, LED readout feel",
+    render(pct, height, color) {
+      const filled = Math.round(pct/100*height);
+      const rows = [];
+      for(let r = height; r >= 1; r--) {
+        rows.push(r <= filled ? `<span class="${color}">▬</span>` : "╌");
+      }
+      return rows;
+    }
+  }
+];
+
+let animFrame = null;
+let animPcts = COLS.map(c => c.pct);
+let animTargets = COLS.map(c => c.pct);
+let animDir = COLS.map(() => (Math.random() > 0.5 ? 1 : -1));
+
+function renderStyle(s, height, pcts) {
+  const cols = COLS.map((c, i) => {
+    const rows = s.render(pcts[i], height, c.color);
+    const colWidth = "1.2em";
+    const rowsHtml = rows.map(r => `<div style="width:${colWidth};text-align:center">${r}</div>`).join("");
+    return `<div class="col" style="margin:0 6px">
+      <span class="col-pct">${Math.round(pcts[i])}</span>
+      <div class="col-bar" style="height:${height*1.5}em">${rowsHtml}</div>
+      <span class="col-label">${c.label}</span>
+    </div>`;
+  }).join("");
+  return `<div class="panel">
+    <div class="ptitle">${s.name}</div>
+    <div class="chart-wrap">${cols}</div>
+    <div class="desc">${s.desc}</div>
+  </div>`;
+}
+
+function getHeight() { return parseInt(document.getElementById('hSlider').value); }
+function getStyleVal() { return document.getElementById('styleSelect').value; }
+function getAnim() { return document.getElementById('animToggle').checked; }
+
+function draw(pcts) {
+  const height = getHeight();
+  const sv = getStyleVal();
+  const toShow = sv === 'all' ? STYLES : [STYLES[parseInt(sv)]];
+  document.getElementById('container').innerHTML = toShow.map(s => renderStyle(s, height, pcts)).join('');
+}
+
+function tick() {
+  if(!getAnim()) return;
+  animPcts = animPcts.map((p, i) => {
+    let np = p + animDir[i] * (0.8 + Math.random() * 1.2);
+    if(np >= 98 || np <= 5) { animDir[i] *= -1; np = Math.max(5, Math.min(98, np)); }
+    return np;
+  });
+  draw(animPcts);
+  animFrame = setTimeout(tick, 120);
+}
+
+document.getElementById('hSlider').addEventListener('input', () => {
+  document.getElementById('hVal').textContent = document.getElementById('hSlider').value;
+  draw(animPcts);
+});
+document.getElementById('styleSelect').addEventListener('change', () => draw(animPcts));
+document.getElementById('animToggle').addEventListener('change', () => {
+  clearTimeout(animFrame);
+  if(getAnim()) tick(); else draw(animPcts);
+});
+
+document.getElementById('hVal').textContent = getHeight();
+draw(animPcts);
+</script>

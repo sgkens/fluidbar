@@ -1,0 +1,205 @@
+# ==============================================================================
+# File: SimpleBar.psm1
+# ==============================================================================
+
+function New-SimpleBar {
+    <#
+    .SYNOPSIS
+    Generates a text-based progress or status bar with ANSI color support, text injection, conditional coloring, and RGB gradients.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false, Position = 0)]
+        [string[]]$Brackets = @('[', ']'),
+
+        [Parameter(Mandatory = $true, Position = 1)]
+        [ValidateRange(0, 100)]
+        [int]$Fill,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(3, [int]::MaxValue)]
+        [int]$Width = 20,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, [int]::MaxValue)]
+        [int]$Height = 1,
+
+        [Parameter(Mandatory = $false)]
+        [char]$FillChar = [char]9608,
+
+        [Parameter(Mandatory = $false)]
+        [char]$EmptyChar = '-',
+
+        [Parameter(Mandatory = $false)]
+        [hashtable]$ColorPalette = @{},
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('None', 'Center', 'Start', 'End', 'Before', 'After')]
+        [string]$PercentagePosition = 'None',
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('Solid', 'Conditional', 'Gradient')]
+        [string]$ColorMode = 'Solid',
+
+        [Parameter(Mandatory = $false)]
+        [hashtable]$ColorThresholds = @{
+            30  = "38;5;196"
+            70  = "38;5;226"
+            100 = "38;5;46" 
+        },
+
+        [Parameter(Mandatory = $false)]
+        [int[]]$GradientStart = @(255, 0, 0),
+
+        [Parameter(Mandatory = $false)]
+        [int[]]$GradientEnd = @(0, 255, 0)
+    )
+
+    process {
+        $esc = [char]27
+        $reset = "$esc[0m"
+
+        $rawLeft = if ($Brackets.Count -gt 0) { $Brackets[0] } else { '' }
+        $rawRight = if ($Brackets.Count -gt 1) { $Brackets[1] } else { '' }
+
+        $innerWidth = $Width - ($rawLeft.Length + $rawRight.Length)
+        if ($innerWidth -lt 1) { $innerWidth = 1 }
+
+        $fillCount = [math]::Round(($Fill / 100.0) * $innerWidth)
+        if ($fillCount -gt $innerWidth) { $fillCount = $innerWidth }
+        if ($fillCount -lt 0) { $fillCount = 0 }
+
+        $emptyCount = $innerWidth - $fillCount
+
+        $innerString = ([string]$FillChar * $fillCount) + ([string]$EmptyChar * $emptyCount)
+        $pctText = "$Fill%"
+
+        if ($PercentagePosition -in @('Start', 'Center', 'End')) {
+            if ($innerWidth -ge $pctText.Length) {
+                $insertIndex = 0
+                if ($PercentagePosition -eq 'Center') {
+                    $insertIndex = [math]::Floor(($innerWidth - $pctText.Length) / 2)
+                }
+                elseif ($PercentagePosition -eq 'End') {
+                    $insertIndex = $innerWidth - $pctText.Length
+                }
+                $innerString = $innerString.Remove($insertIndex, $pctText.Length).Insert($insertIndex, $pctText)
+            }
+        }
+
+        function Get-PaletteColor {
+            param([string]$Key)
+            $matchKey = $ColorPalette.Keys | Where-Object { $_ -eq $Key } | Select-Object -First 1
+            if ($matchKey) { return $ColorPalette[$matchKey] }
+            return $null
+        }
+
+        $conditionalCode = $null
+        if ($ColorMode -eq 'Conditional') {
+            $matchingThreshold = $ColorThresholds.Keys | Sort-Object | Where-Object { $_ -ge $Fill } | Select-Object -First 1
+            if ($null -ne $matchingThreshold) {
+                $conditionalCode = $ColorThresholds[$matchingThreshold]
+            }
+        }
+
+        $coloredInnerChars = [System.Collections.Generic.List[string]]::new()
+        $innerCharArray = $innerString.ToCharArray()
+
+        for ($i = 0; $i -lt $innerWidth; $i++) {
+            $currentChar = $innerCharArray[$i]
+            $code = $null
+
+            if ($i -lt $fillCount) {
+                if ($ColorMode -eq 'Solid') {
+                    $code = Get-PaletteColor -Key 'Fill'
+                }
+                elseif ($ColorMode -eq 'Conditional') {
+                    $code = $conditionalCode
+                }
+                elseif ($ColorMode -eq 'Gradient') {
+                    $ratio = 0
+                    if ($fillCount -gt 1) {
+                        $ratio = $i / ($fillCount - 1)
+                    }
+                    $r = [math]::Round($GradientStart[0] + ($GradientEnd[0] - $GradientStart[0]) * $ratio)
+                    $g = [math]::Round($GradientStart[1] + ($GradientEnd[1] - $GradientStart[1]) * $ratio)
+                    $b = [math]::Round($GradientStart[2] + ($GradientEnd[2] - $GradientStart[2]) * $ratio)
+                    $code = "38;2;$r;$g;$b"
+                }
+            }
+            else {
+                $code = Get-PaletteColor -Key 'Empty'
+            }
+
+            if ($code) {
+                $coloredInnerChars.Add("$esc[$code`m$currentChar$reset")
+            }
+            else {
+                $coloredInnerChars.Add([string]$currentChar)
+            }
+        }
+
+        $assembledInner = -join $coloredInnerChars
+
+        $leftCode = Get-PaletteColor -Key 'Brackets'
+        $rightCode = Get-PaletteColor -Key 'Brackets'
+        $coloredLeft = if ($leftCode) { "$esc[$leftCode`m$rawLeft$reset" } else { $rawLeft }
+        $coloredRight = if ($rightCode) { "$esc[$rightCode`m$rawRight$reset" } else { $rawRight }
+
+        $barLine = -join ($coloredLeft, $assembledInner, $coloredRight)
+
+        if ($PercentagePosition -eq 'Before') {
+            $barLine = "$pctText $barLine"
+        }
+        elseif ($PercentagePosition -eq 'After') {
+            $barLine = "$barLine $pctText"
+        }
+
+        if ($Height -eq 1) {
+            Write-Output $barLine
+        }
+        else {
+            $outputArray = [string[]]::new($Height)
+            for ($i = 0; $i -lt $Height; $i++) {
+                $outputArray[$i] = $barLine
+            }
+            Write-Output ($outputArray -join [Environment]::NewLine)
+        }
+    }
+}
+
+function Invoke-SimpleBarAnimation {
+    <#
+    .SYNOPSIS
+    Animates a progress bar from 0 to 100 on a single console line.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [hashtable]$BarParameters,
+
+        [Parameter(Mandatory = $false)]
+        [int]$DelayMilliseconds = 25
+    )
+
+    process {
+        $esc = [char]27
+        Write-Host -NoNewline "$esc[?25l"
+        
+        try {
+            for ($i = 0; $i -le 100; $i++) {
+                $BarParameters['Fill'] = $i
+                $frame = New-SimpleBar @BarParameters
+                
+                Write-Host -NoNewline "`r$frame"
+                Start-Sleep -Milliseconds $DelayMilliseconds
+            }
+            Write-Host ""
+        }
+        finally {
+            Write-Host -NoNewline "$esc[?25h"
+        }
+    }
+}
+
+#Export-ModuleMember -Function New-SimpleBar, Invoke-SimpleBarAnimation

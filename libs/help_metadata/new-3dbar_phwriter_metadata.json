@@ -1,0 +1,33 @@
+{
+  "indent": 1,
+  "examples": [
+    "New-3DBar -Title 'CPU Status' -Fill 60"
+  ],
+  "name": "FluidBar",
+  "commandinfo": {
+    "description": "Renders an extruded pipe style graphic mapped across 3 vertical lines, complete with structural caps.",
+    "cmdlet": "New-3DBar",
+    "source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+    "synopsis": "New-3DBar [-Title] <String> [-Fill] <Int32> [-Width <Int32>]"
+  },
+  "version": "0.1.0",
+  "padding": 1,
+  "paramtable": [
+    {
+      "type": "string",
+      "description": "Injected structurally above the rendered pipe.",
+      "inline": false,
+      "param": "Title",
+      "name": "Title",
+      "required": true
+    },
+    {
+      "type": "int",
+      "description": "Determines the visual pipe volume.",
+      "inline": false,
+      "param": "Fill",
+      "name": "Fill",
+      "required": true
+    }
+  ]
+}
