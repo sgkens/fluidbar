@@ -1,0 +1,32 @@
+{
+    "PSModule" : {
+        "modulename": "FluidBar",
+        "releasetype": "public",
+        "gituser": "sgkens",
+        "gitgroup": "phellams",
+        "gitlabid": "",
+        "gitlabid_public": "",
+        "license": "MIT",
+        "iconurl": "https://raw.githubusercontent.com/phellams/phellams-general-resources/main/logos/fluidbar/dist/png/fluidbar-logo-128x128.png",
+        "phwriter": true,
+        "phwriter_source": "https://gitlab.com/phellams/fluidbar/-/blob/main/README.md",
+        "pester_test_files": [
+            ".\\*.psm1"
+        ],
+        "modulefiles": [
+            "FluidBar.psm1",
+            "FluidBar.psd1",
+            "LICENSE",
+            "readme.md",
+            "readme.txt",
+            "icon.png"
+        ],
+        "modulefolders": [
+            "cmdlets",
+            "libs"
+        ],
+        "moduleexclude": [
+            "commit-helper.ps1"
+        ]
+    }
+}

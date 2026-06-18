@@ -1,0 +1,10 @@
+# Phellams Automator Devops artifacts
+/dist/
+/automator-devops/
+/coverage.xml
+/build.env
+
+# PowerShell / OS temporary files
+*.log
+.DS_Store
+Thumbs.db
